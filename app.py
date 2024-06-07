@@ -87,13 +87,13 @@ st.markdown(
         font-size: 48px;
         font-weight: bold;
         text-align: center;
-        color: #FF6B6B;
+        color: #ff7900;
         font-family: 'Gotham Rounded', sans-serif;
     }
     .subtitle {
         font-size: 36px;
         text-align: center;
-        color: #4A4A4A;
+        color: #000000;
         font-family: 'Gotham Rounded', sans-serif;
     }
     .text-center {
@@ -101,6 +101,19 @@ st.markdown(
     }
     .bold {
         font-weight: bold;
+    }
+    .button {
+        background-color: #ff7900;
+        color: #ffffff;
+        border: none;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 12px;
     }
     </style>
     """,
@@ -117,20 +130,26 @@ else:
     player = st.session_state.player
 
     if st.session_state.photos.empty:
-        st.session_state.photos = mapping[mapping['present'] == 1].sample(frac=1).reset_index(drop=True)  # Shuffle images
+        real_images = mapping[(mapping['real'] == 1) & (mapping['present'] == 1)].sample(n=5, random_state=42)
+        fake_images = mapping[(mapping['real'] == 0) & (mapping['present'] == 1)].sample(n=5, random_state=42)
+        st.session_state.photos = pd.concat([real_images, fake_images]).sample(frac=1, random_state=42).reset_index(drop=True)  # Shuffle images
         st.session_state.start_time = time.time()
     
     if st.session_state.current_photo < len(st.session_state.photos):
         current_photo = st.session_state.photos.loc[st.session_state.current_photo, 'image_path']
-        st.image(current_photo)
         
         response = None
-        
-        if st.button("Real", key=f"real_{st.session_state.current_photo}"):
-            response = 1
-        if st.button("Fake", key=f"fake_{st.session_state.current_photo}"):
-            response = 0
 
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("Real", key=f"real_{st.session_state.current_photo}", help="Click if you think the image is real"):
+                response = 1
+        with col2:
+            if st.button("Fake", key=f"fake_{st.session_state.current_photo}", help="Click if you think the image is fake"):
+                response = 0
+
+        st.image(current_photo)
+        
         if response is not None:
             time_to_respond = time.time() - st.session_state.start_time
             image_id = st.session_state.photos.loc[st.session_state.current_photo, 'image_id']
@@ -150,6 +169,7 @@ else:
         st.markdown("<h1 class='title'>Game Over</h1>", unsafe_allow_html=True)
         st.markdown("<h2 class='subtitle'>Thank you for playing!</h2>", unsafe_allow_html=True)
         accuracy, avg_speed, score = calculate_stats(player)
+        st.write(f"Final stats: Accuracy: {accuracy:.1f}%, Avg. Speed: {avg_speed:.2f} seconds, Score: {score}")
         
         # Add player scores to scores.csv
         new_scores = pd.DataFrame(st.session_state.responses)
