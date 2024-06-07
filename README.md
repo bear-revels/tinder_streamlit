@@ -32,6 +32,23 @@ This app is a web application built with Streamlit, a Python library for buildin
 └── requirements.txt
 ```
 
+## 🎮 Setup Instructions
+
+### Step 1: Clone repo
+```
+git clone git@github.com:bear-revels/tinder_streamlit.git
+```
+
+### Step 2: Install dependencies
+```
+pip install -r requirements.txt
+```
+
+### Step 3: Run streamlit app locally
+```
+streamlit run app.py
+```
+
 
 ## 📌 Background
 
