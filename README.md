@@ -37,7 +37,7 @@ This app is a web application built with Streamlit, a Python library for buildin
 
 This team project was completed as part of the AI Boocamp at BeCode.org. Connect with the team behind the magic.
 
-1. [Alice Mendes] (https://www.linkedin.com/in/alice-edcm/)
+1. [Alice Mendes](https://www.linkedin.com/in/alice-edcm/)
 2. [Bear Revels](https://www.linkedin.com/in/bear-revels/)
 2. [Daryoush Ghanbarpour](https://www.linkedin.com/in/daryoushghanbarpour/)
 3. [Nathalie Nachtergaele](https://www.linkedin.com/in/nathalie-nachtergaele/)
