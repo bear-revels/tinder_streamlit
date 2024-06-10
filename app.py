@@ -93,7 +93,7 @@ st.markdown(
     .subtitle {
         font-size: 36px;
         text-align: center;
-        color: #000000;
+        color: #d3d3d3;
         font-family: 'Gotham Rounded', sans-serif;
     }
     .text-center {
@@ -102,18 +102,21 @@ st.markdown(
     .bold {
         font-weight: bold;
     }
-    .button {
-        background-color: #ff7900;
-        color: #ffffff;
-        border: none;
+    .stButton > button {
+        font-weight: bold;
         padding: 10px 20px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        cursor: pointer;
+        border: none;
         border-radius: 12px;
+        cursor: pointer;
+        text-align: center;
+    }
+    .stButton > button.real {
+        background-color: #28a745;
+        color: #ffffff;
+    }
+    .stButton > button.fake {
+        background-color: #dc3545;
+        color: #ffffff;
     }
     </style>
     """,
@@ -140,7 +143,7 @@ else:
         
         response = None
 
-        col1, col2 = st.columns(2)
+        col1, col2, _ = st.columns([1, 1, 1])
         with col1:
             if st.button("Real", key=f"real_{st.session_state.current_photo}", help="Click if you think the image is real"):
                 response = 1
