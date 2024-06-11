@@ -22,10 +22,10 @@ class Game:
             st.session_state.level = 1
             st.session_state.score = 0
             st.session_state.timer = 30
-
-        real_image, genai_image = self.db.get_random_images()
-        images = [(real_image, 1), (genai_image, 0)]
-        random.shuffle(images)
+        #
+        # real_image, genai_image = self.db.get_random_images()
+        # images = [(real_image, 1), (genai_image, 0)]
+        # random.shuffle(images)
 
         col1, col2 = st.columns(2)
         with col1:
