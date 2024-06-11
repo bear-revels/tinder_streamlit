@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 
 # Password for accessing the page
 PASSWORD = "BeCode24"
@@ -6,25 +7,33 @@ PASSWORD = "BeCode24"
 # Initialize session state
 if 'authenticated' not in st.session_state:
     st.session_state.authenticated = False
+if 'upload_mode' not in st.session_state:
+    st.session_state.upload_mode = None
+if 'upload_again' not in st.session_state:
+    st.session_state.upload_again = False
 
 def main():
-    # Check if the user is authenticated
     if st.session_state.authenticated:
-        # Display the upload form
-        st.title("Upload Image")
-        
-        uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
-        if uploaded_file is not None:
-            label = st.selectbox("Is this image AI-generated or real?", ("Select", "AI", "Real"))
-            if st.button("Submit"):
-                if label != "Select":
-                    # Store the image
-                    save_uploaded_file(uploaded_file)
-                    st.success("Image uploaded successfully!")
-                else:
-                    st.error("Please select if the image is AI-generated or real.")
+        if st.session_state.upload_mode is None or st.session_state.upload_again:
+            st.session_state.upload_again = False
+            st.title("Select Image Type")
+            if st.button("AI"):
+                st.session_state.upload_mode = "AI"
+            if st.button("Real"):
+                st.session_state.upload_mode = "Real"
+
+        if st.session_state.upload_mode:
+            st.title(f"Upload {st.session_state.upload_mode} Image")
+            uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+            if uploaded_file is not None:
+                if st.button("Submit"):
+                    save_uploaded_file(uploaded_file, st.session_state.upload_mode)
+                    st.success("Thank you! Your image has been uploaded!")
+                    if st.button("Upload Another Image"):
+                        st.session_state.upload_again = True
+                        st.session_state.upload_mode = None
+                        st.experimental_rerun()
     else:
-        # Display the password form
         st.title("Authentication Required")
         password = st.text_input("Enter Password", type="password")
         if st.button("Submit"):
@@ -34,11 +43,15 @@ def main():
             else:
                 st.error("Invalid password. Please try again.")
 
-def save_uploaded_file(uploaded_file):
+def save_uploaded_file(uploaded_file, label):
+    # Ensure the uploads directory exists
+    if not os.path.exists('./uploads'):
+        os.makedirs('./uploads')
+    
     # Save the uploaded file
-    with open(f"./images/{uploaded_file.name}", "wb") as f:
+    with open(f"./uploads/{label}_{uploaded_file.name}", "wb") as f:
         f.write(uploaded_file.getbuffer())
-    return st.success("Saved file :{} in ./images".format(uploaded_file.name))
+    return st.success(f"Saved file: {uploaded_file.name} in ./uploads")
 
 if __name__ == "__main__":
     main()
