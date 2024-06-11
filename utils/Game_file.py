@@ -1,6 +1,6 @@
 import streamlit as st
 import random
-from database import Database
+from .Database_file import Database
 
 
 class Game:

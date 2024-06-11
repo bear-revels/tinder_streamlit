@@ -1,5 +1,5 @@
-from .game import Game
-from .ui import UI
-from .database import Database
+from .Game_file import Game
+from .Ui_file import UI
+from .Database_file import Database
 
 __all__ = ["Game", "Database", "UI"]
