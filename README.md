@@ -38,7 +38,7 @@ This app is a web application built with Streamlit, a Python library for buildin
 
 flowchart TD
     X(Home page)
-    A(click upload image tab)
+    A(upload image tab)
     B(Fill in password)
     L{pwd correct}
     C(upload image or images)
