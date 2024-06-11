@@ -2,38 +2,31 @@ import streamlit as st
 import os
 
 # Password for accessing the page
-PASSWORD = "BeCode24"
+PASSWORD = "test"
 
 # Initialize session state
+if 'name' not in st.session_state:
+    st.session_state.name = ""
 if 'authenticated' not in st.session_state:
     st.session_state.authenticated = False
 if 'upload_mode' not in st.session_state:
     st.session_state.upload_mode = None
 if 'upload_again' not in st.session_state:
     st.session_state.upload_again = False
+if 'last_image_number' not in st.session_state:
+    st.session_state.last_image_number = 0
 
 def main():
-    if st.session_state.authenticated:
-        if st.session_state.upload_mode is None or st.session_state.upload_again:
-            st.session_state.upload_again = False
-            st.title("Select Image Type")
-            if st.button("AI"):
-                st.session_state.upload_mode = "AI"
-            if st.button("Real"):
-                st.session_state.upload_mode = "Real"
-
-        if st.session_state.upload_mode:
-            st.title(f"Upload {st.session_state.upload_mode} Image")
-            uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
-            if uploaded_file is not None:
-                if st.button("Submit"):
-                    save_uploaded_file(uploaded_file, st.session_state.upload_mode)
-                    st.success("Thank you! Your image has been uploaded!")
-                    if st.button("Upload Another Image"):
-                        st.session_state.upload_again = True
-                        st.session_state.upload_mode = None
-                        st.experimental_rerun()
-    else:
+    if not st.session_state.name:
+        st.title("Enter your name")
+        name = st.text_input("Name")
+        if st.button("Submit"):
+            if name:
+                st.session_state.name = name
+                st.experimental_rerun()
+            else:
+                st.error("Please enter your name.")
+    elif not st.session_state.authenticated:
         st.title("Authentication Required")
         password = st.text_input("Enter Password", type="password")
         if st.button("Submit"):
@@ -42,16 +35,43 @@ def main():
                 st.experimental_rerun()
             else:
                 st.error("Invalid password. Please try again.")
+    else:
+        if st.session_state.upload_mode is None or st.session_state.upload_again is True:
+            st.session_state.upload_again = False
+            st.title("Select Image Type")
+            
+            # Hide buttons after click
+            if not st.session_state.upload_mode:
+                if st.button("AI"):
+                    st.session_state.upload_mode = "AI"
+                    st.experimental_rerun()
+                if st.button("Real"):
+                    st.session_state.upload_mode = "Real"
+                    st.experimental_rerun()
 
-def save_uploaded_file(uploaded_file, label):
+        if st.session_state.upload_mode:
+            st.title(f"Upload {st.session_state.upload_mode} Images")
+            uploaded_files = st.file_uploader("Choose images...", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
+            if uploaded_files:
+                if st.button("Submit"):
+                    save_uploaded_files(uploaded_files, st.session_state.upload_mode, st.session_state.name)
+                    st.success("Thank you! Your images have been uploaded!")
+                    if st.button("Upload Another Image"):
+                        st.session_state.upload_again = True
+                        st.session_state.upload_mode = None
+                        st.experimental_rerun()
+
+def save_uploaded_files(uploaded_files, label, username):
     # Ensure the uploads directory exists
     if not os.path.exists('./uploads'):
         os.makedirs('./uploads')
-    
-    # Save the uploaded file
-    with open(f"./uploads/{label}_{uploaded_file.name}", "wb") as f:
-        f.write(uploaded_file.getbuffer())
-    return st.success(f"Saved file: {uploaded_file.name} in ./uploads")
+
+    for i, uploaded_file in enumerate(uploaded_files, start=1):
+        st.session_state.last_image_number += 1
+        file_name = f"{label}_{username}_image_{st.session_state.last_image_number}.jpg"
+        with open(f"./uploads/{file_name}", "wb") as f:
+            f.write(uploaded_file.getbuffer())
+        st.success(f"Saved file: {file_name} in ./uploads")
 
 if __name__ == "__main__":
     main()
