@@ -1,12 +1,12 @@
 import streamlit as st
 import random
+from database import Database
 
 
 class Game:
     def __init__(self, db):
         """Initialize the Game class with a database instance."""
-        self.db = db
-        self.img = []
+        self.db = Database()
 
     def display_play_page(self):
         """Display the game play page."""
@@ -23,9 +23,10 @@ class Game:
             st.session_state.score = 0
             st.session_state.timer = 30
         #
-        # real_image, genai_image = self.db.get_random_images()
-        # images = [(real_image, 1), (genai_image, 0)]
-        # random.shuffle(images)
+        real_image = self.db.select_images_real()
+        genai_image = self.db.select_images_real()
+        images = [(real_image, 1), (genai_image, 0)]
+        random.shuffle(images)
 
         col1, col2 = st.columns(2)
         with col1:
@@ -49,6 +50,3 @@ class Game:
             st.write("Wrong! Game Over!")
             st.write(f"Your final score: {st.session_state.score}")
             st.session_state.page = "home"
-
-    def get_images_real(self):
-        """Get all real images and store them inside instance variable self.real_img"""
