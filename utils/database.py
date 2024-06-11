@@ -169,7 +169,21 @@ class Database:
         cursor = self.conn.cursor()
         cursor.execute(
             """
-            SELECT * from images
+            SELECT * FROM images WHERE is_real = 1
+            """
+        )
+        rows = cursor.fetchall()
+        # Convert rows to a list of dictionaries
+        dict_rows = [dict(row) for row in rows]
+        return dict_rows
+
+    def select_images_ai(self):
+        """selects the ai images from the images table"""
+        self.conn.row_factory = sqlite3.Row  # Set row_factory to sqlite3.Row
+        cursor = self.conn.cursor()
+        cursor.execute(
+            """
+            SELECT * FROM images WHERE is_real = 0
             """
         )
         rows = cursor.fetchall()

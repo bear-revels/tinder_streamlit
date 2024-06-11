@@ -1,5 +1,6 @@
 from database import Database
 
 db = Database()
-images = db.select_images_real()
-print(images)
+images_real = db.select_images_real()
+images_ai = db.select_images_ai()
+print(images_ai)
