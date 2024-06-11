@@ -3,11 +3,35 @@ import random
 from pathlib import Path
 import os
 from PIL import Image
+import hmac
 
 class UI:
     def __init__(self, db):
         """Initialize the UI class with a database instance."""
         self.db = db
+
+    def check_password(self):
+        """Returns `True` if the user had the correct password."""
+
+        def password_entered():
+            """Checks whether a password entered by the user is correct."""
+            if hmac.compare_digest(st.session_state["password"], st.secrets["password"]):
+                st.session_state["password_correct"] = True
+                del st.session_state["password"]  # Don't store the password.
+            else:
+                st.session_state["password_correct"] = False
+
+        # Return True if the password is validated.
+        if st.session_state.get("password_correct", False):
+            return True
+
+        # Show input for password.
+        st.text_input(
+            "Password", type="password", on_change=password_entered, key="password"
+        )
+        if "password_correct" in st.session_state:
+            st.error("😕 Password incorrect")
+        return False
 
     def display_home_page(self):
         """Display the home page with navigation tiles."""
@@ -59,6 +83,9 @@ class UI:
         """Display the contribute page where users can upload images."""
         st.write("Contribute your images to the game!")
         
+        if not self.check_password():
+            st.stop()
+
         contributor_name = st.text_input("Please enter your name to add images to the game:")
         image_type = st.selectbox("Select the type of image:", ["Real", "GenAI"])
         uploaded_files = st.file_uploader("Upload images:", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
