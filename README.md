@@ -32,6 +32,51 @@ This app is a web application built with Streamlit, a Python library for buildin
 └── requirements.txt
 ```
 
+## 🚀  Project flow chart:
+
+```mermaid
+
+flowchart TD
+    X(Home page)
+    A(click upload image tab)
+    B(Fill in password)
+    L{pwd correct}
+    C(upload image or images)
+    D(select AI or not)
+    E(Uploads image to images folder)
+    F(update database)
+
+    G(play game tab)
+    H(fill in name)
+    I(click on what image is most likely AI)
+    J{Correct guess?}
+    K(One image goes away one stays)
+    N(update scores table)
+    M(leaderboard)
+
+    X --> A
+    X --> G
+    X --> M
+
+    A --> B
+    B --> L
+    L -- YES --> C
+    L -- NO --> B
+    C --> D
+    D --> E
+    E --> F
+
+    G --> H
+    H --> I
+    I --do this x times --> J
+    J --YES --> N
+    J --NO --> N
+    N --> K
+    K --when x times is reached --> M
+
+```
+
+
 ## 🎮 Setup Instructions
 
 ### Step 1: Clone repo
