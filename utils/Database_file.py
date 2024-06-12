@@ -6,7 +6,9 @@ from pathlib import Path
 class Database:
     def __init__(self):
         """Initialize the database and create tables if they don't exist."""
-        self.conn = sqlite3.connect("./../arcade.db")
+        base_dir = os.path.dirname(os.path.abspath(__file__))  # Get the directory of the current script
+        db_path = os.path.join(base_dir, '..', 'arcade.db')  # Construct the path to the database file
+        self.conn = sqlite3.connect(db_path)  # Connect to the database
         self.create_tables()
         self.refresh_images()
 
