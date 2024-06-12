@@ -1,9 +1,6 @@
 import streamlit as st
 import os
 
-# Password for accessing the page
-PASSWORD = "test"
-
 # Initialize session state
 if 'name' not in st.session_state:
     st.session_state.name = ""
@@ -28,7 +25,7 @@ def main():
         st.title("Authentication Required")
         password = st.text_input("Enter Password", type="password")
         if st.button("Submit"):
-            if password == PASSWORD:
+            if password == password:
                 st.session_state.authenticated = True
                 st.experimental_rerun()
             else:
@@ -76,7 +73,7 @@ def save_uploaded_files(uploaded_files, label, username):
         file_extension = file_extension.lower()  # Ensure the extension is in lowercase
         
         # Construct the new file name
-        new_file_name = f"{label.lower()}_{file_name_without_ext}_{username}{file_extension}"
+        new_file_name = f"{label.lower()}_{username}_{file_name_without_ext}{file_extension}"
         file_path = os.path.join(dir_path, new_file_name)
         
         # Save the file
