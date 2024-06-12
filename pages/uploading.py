@@ -51,21 +51,22 @@ def main():
     else:
         if st.session_state.upload_mode is None:
             select_image_type()
-        
-        if st.session_state.upload_mode:
+        elif st.session_state.show_upload:
             st.title(f"Upload {st.session_state.upload_mode} Images")
             uploaded_files = st.file_uploader("Choose images...", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
             if uploaded_files:
-                if st.button("Submit"):
+                if st.button("Submit image(s)"):
                     save_uploaded_files(uploaded_files, st.session_state.upload_mode, st.session_state.name)
-                    st.success("Thank you! Your images have been uploaded!")
-
-                # Display "Upload Another Image" button if there are uploaded files
-                if uploaded_files:
-                    if st.button("Upload Another Image"):
-                        select_image_type()
+                    st.success("Thank you! Your image(s) have been uploaded!")
+                    st.session_state.show_upload = False  # Hide the parts used before
+                    st.session_state.upload_mode = None  # Reset upload mode
+                    st.session_state.last_image_number = 0  # Reset last image number
+                    st.experimental_rerun()  # Rerun the app to show initial screen
+        else:
+            st.title("Upload in progress...")
 
 def select_image_type():
+    st.session_state.show_upload = True
     st.title("Select Image Type")
     if st.button("genAI"):
         st.session_state.upload_mode = "genAI"
