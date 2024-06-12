@@ -1,30 +1,33 @@
 import streamlit as st
 import random
+from .Database_file import Database
+
 
 class Game:
     def __init__(self, db):
         """Initialize the Game class with a database instance."""
-        self.db = db
+        self.db = Database()
 
     def display_play_page(self):
         """Display the game play page."""
         player_name = st.text_input("Enter your name to start playing:", "")
         if player_name:
-            if 'player_id' not in st.session_state:
+            if "player_id" not in st.session_state:
                 st.session_state.player_id = self.db.add_player(player_name)
             self.start_game()
 
     def start_game(self):
         """Start the game and handle game logic."""
-        if 'level' not in st.session_state:
+        if "level" not in st.session_state:
             st.session_state.level = 1
             st.session_state.score = 0
             st.session_state.timer = 30
-        
-        real_image, genai_image = self.db.get_random_images()
+        #
+        real_image = self.db.select_images_real()
+        genai_image = self.db.select_images_real()
         images = [(real_image, 1), (genai_image, 0)]
         random.shuffle(images)
-        
+
         col1, col2 = st.columns(2)
         with col1:
             if st.button("Select Left Image", key="left"):
@@ -46,4 +49,4 @@ class Game:
         else:
             st.write("Wrong! Game Over!")
             st.write(f"Your final score: {st.session_state.score}")
-            st.session_state.page = 'home'
+            st.session_state.page = "home"
