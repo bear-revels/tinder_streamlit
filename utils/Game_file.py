@@ -4,7 +4,7 @@ from .Database_file import Database
 
 
 class Game:
-    def __init__(self, db):
+    def __init__(self):
         """Initialize the Game class with a database instance."""
         self.db = Database()
 

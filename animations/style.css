@@ -1,0 +1,9 @@
+/*submit button enter your name tab uploading*/
+button[kind="test"]{
+    background-color: aquamarine;
+    border: 2px solid white;
+    padding: 20px 20px 20px 70px;
+    padding: 5% 5% 5% 10%;
+    border-radius: 10px;
+}
+
