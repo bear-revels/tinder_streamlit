@@ -49,13 +49,19 @@ class UI:
         col1, col2, col3 = st.columns(3)
         with col1:
             st.write("Play")
-            st.page_link("Home.py", label="Game",icon="🎮")
+            st.page_link("./pages/1_🎮_GAME.py", label="Game",icon="🎮")
         with col2:
             st.write("Contribute")
             st.page_link("./pages/2_⬆️_Contribute.py", label="upload",icon="⬆️")
         with col3:
             st.write("Leaderboard")
-            st.page_link("Home.py", label="board",icon="🏆")
+            st.page_link("./pages/3_🏆_Leaderboard.py", label="board",icon="🏆")
+        
+        st.sidebar.write("Made by students @BecodeGhent:")
+        st.sidebar.write("Bear, Caroline, Nathalie, Niels")
+        st.sidebar.write("Shout out to the other collegues for generating the images:")
+        st.sidebar.write("??")
+        st.sidebar.write("©️copyrights")
 
     def display_play_page(self):
         """Display the game play page."""
