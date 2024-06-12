@@ -32,11 +32,11 @@ class Game:
         with col1:
             if st.button("Select Left Image", key="left"):
                 self.check_selection(images[0][1] == 1)
-            st.image(images[0][0][4], use_column_width=False)
+            st.image(images[0][0][0]['filepath'], use_column_width=False)
         with col2:
             if st.button("Select Right Image", key="right"):
                 self.check_selection(images[1][1] == 1)
-            st.image(images[1][0][4], use_column_width=False)
+            st.image(images[1][0][0]['filepath'], use_column_width=False)
 
     def check_selection(self, is_real_image):
         """Check the user's selection and update the game state."""
