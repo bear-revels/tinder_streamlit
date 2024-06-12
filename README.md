@@ -14,22 +14,41 @@ This app is a web application built with Streamlit, a Python library for buildin
 ## 📦 Repo Structure
 
 ```
+├── Home.py
 ├── README.md
-├── app.py
-├── dev.ipynb
-├── files
-│   ├── mapping.csv
-│   └── scores.csv
+├── animations
+│   ├── background.avif
+│   ├── background2.webp
+│   ├── bg3.jpg
+│   ├── hourglass.json
+│   └── style.css
+├── arcade.db
 ├── images
-│   ├── alice_1.png
-│   ├── ...
-│   ├── bear_1.png
-│   ├── ...
-│   ├── dar_1.png
-│   ├── ...
-│   ├── nathalie_1.png
-│   ├── ...
-└── requirements.txt
+│   ├── genai
+│   │   ├── alice_1.png
+│   │   ├── ...
+│   │   ├── bear_1.png
+│   │   ├── ...
+│   │   ├── dar_1.png
+│   │   ├── ...
+│   │   ├── nathalie_1.png
+│   │   └── ...
+│   └── real
+│       ├── pexel_1.jpg
+│       └── ...
+├── pages
+│   ├── 1_🎮_GAME.py
+│   ├── 2_⬆️_Contribute.py
+│   └── 3_🏆_Leaderboard.py
+├── requirements.txt
+└── utils
+    ├── Database_file.py
+    ├── Elo_file.py
+    ├── Game_file.py
+    ├── Test_file.py
+    ├── Ui_file.py
+    ├── __init__.py
+    └── __pycache__
 ```
 
 ## 🚀  Project flow chart:
@@ -38,21 +57,22 @@ This app is a web application built with Streamlit, a Python library for buildin
 
 flowchart TD
     X(Home page)
-    A(upload image tab)
+    A(CONTRIBUTE)
     B(Fill in password)
     L{pwd correct}
-    C(upload image or images)
-    D(select AI or not)
+    C(select image or images)
+    D(select AI or real)
     E(Uploads image to images folder)
     F(update database)
 
-    G(play game tab)
+    G(GAME)
     H(fill in name)
     I(click on what image is most likely AI)
     J{Correct guess?}
     K(One image goes away one stays)
     N(update scores table)
-    M(leaderboard)
+    O(update scores table)
+    M(LEADERBOARD)
 
     X --> A
     X --> G
@@ -60,19 +80,20 @@ flowchart TD
 
     A --> B
     B --> L
-    L -- YES --> C
+    L -- YES --> D
     L -- NO --> B
-    C --> D
-    D --> E
+    D --> C
+    C --> E
     E --> F
 
     G --> H
     H --> I
-    I --do this x times --> J
+    I --> J
     J --YES --> N
-    J --NO --> N
+    J --NO --> O
     N --> K
-    K --when x times is reached --> M
+    K --> I
+    O --> M
 
 ```
 
