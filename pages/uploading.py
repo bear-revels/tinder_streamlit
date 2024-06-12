@@ -1,9 +1,9 @@
 import streamlit as st
 import os
 
-
+# Load CSS file for custom styles
 with open('./animations/style.css') as f:
-           st.markdown(f'<style>(f.read)<style>', unsafe_allow_html=True)
+    st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 # Password for accessing the page
 PASSWORD = "test"
@@ -15,21 +15,21 @@ if 'authenticated' not in st.session_state:
     st.session_state.authenticated = False
 if 'upload_mode' not in st.session_state:
     st.session_state.upload_mode = None
-if 'upload_again' not in st.session_state:
-    st.session_state.upload_again = False
 if 'last_image_number' not in st.session_state:
     st.session_state.last_image_number = 0
 
 def main():
-    st.markdown("""
+    bg_path = os.path.abspath("/animations/bg3.jpg")
+    st.markdown(f"""
         <style>
         /* Change the background of the main area */
-        .stapp {
-            background: img(./animations/background.avif);
+        .main {{
+            background-image: url('file://{bg_path}');
             background-size: cover;
-        }
+        }}
         </style>
         """, unsafe_allow_html=True)
+
     if not st.session_state.name:
         st.title("Enter your name")
         name = st.text_input("Name")
@@ -49,19 +49,8 @@ def main():
             else:
                 st.error("Invalid password. Please try again.")
     else:
-        if st.session_state.upload_again:
-            st.session_state.upload_again = False
-            st.session_state.upload_mode = None
-            st.experimental_rerun()
-        
         if st.session_state.upload_mode is None:
-            st.title("Select Image Type")
-            if st.button("AI"):
-                st.session_state.upload_mode = "AI"
-                st.experimental_rerun()
-            if st.button("Real"):
-                st.session_state.upload_mode = "Real"
-                st.experimental_rerun()
+            select_image_type()
         
         if st.session_state.upload_mode:
             st.title(f"Upload {st.session_state.upload_mode} Images")
@@ -70,22 +59,45 @@ def main():
                 if st.button("Submit"):
                     save_uploaded_files(uploaded_files, st.session_state.upload_mode, st.session_state.name)
                     st.success("Thank you! Your images have been uploaded!")
-                elif st.button("Upload Another Image"):
-                    st.session_state.upload_again = True
-                    st.experimental_rerun()
-                
+
+                # Display "Upload Another Image" button if there are uploaded files
+                if uploaded_files:
+                    if st.button("Upload Another Image"):
+                        select_image_type()
+
+def select_image_type():
+    st.title("Select Image Type")
+    if st.button("genAI"):
+        st.session_state.upload_mode = "genAI"
+        st.experimental_rerun()
+    if st.button("Real"):
+        st.session_state.upload_mode = "Real"
+        st.experimental_rerun()
 
 def save_uploaded_files(uploaded_files, label, username):
-    # Ensure the uploads directory exists
-    if not os.path.exists('./uploads'):
-        os.makedirs('./uploads')
+    # Define the directory path based on the label
+    dir_path = f"./images/{label.lower()}"
+    
+    # Ensure the directory exists
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
 
-    for i, uploaded_file in enumerate(uploaded_files, start=1):
+    for uploaded_file in uploaded_files:
         st.session_state.last_image_number += 1
-        file_name = f"{label}_{username}_image_{st.session_state.last_image_number}.jpg"
-        with open(f"./uploads/{file_name}", "wb") as f:
+        
+        # Extract the file name without extension and the extension itself
+        file_name_without_ext, file_extension = os.path.splitext(uploaded_file.name)
+        file_extension = file_extension.lower()  # Ensure the extension is in lowercase
+        
+        # Construct the new file name
+        new_file_name = f"{label.lower()}_{file_name_without_ext}_{username}{file_extension}"
+        file_path = os.path.join(dir_path, new_file_name)
+        
+        # Save the file
+        with open(file_path, "wb") as f:
             f.write(uploaded_file.getbuffer())
-        st.success(f"Saved file: {file_name} in ./uploads")
+        
+        st.success(f"Saved file: {new_file_name} in {dir_path}")
 
 if __name__ == "__main__":
     main()
