@@ -1,10 +1,6 @@
 import streamlit as st
 import os
 
-# Load CSS file for custom styles
-with open('./animations/style.css') as f:
-    st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
-
 # Password for accessing the page
 PASSWORD = "test"
 
@@ -19,17 +15,6 @@ if 'last_image_number' not in st.session_state:
     st.session_state.last_image_number = 0
 
 def main():
-    bg_path = os.path.abspath("/animations/bg3.jpg")
-    st.markdown(f"""
-        <style>
-        /* Change the background of the main area */
-        .main {{
-            background-image: url('file://{bg_path}');
-            background-size: cover;
-        }}
-        </style>
-        """, unsafe_allow_html=True)
-
     if not st.session_state.name:
         st.title("Enter your name")
         name = st.text_input("Name")
