@@ -32,7 +32,7 @@ class Lottie:
 
 #usage
 lottie = Lottie()
-lottie_file = lottie.load_from_file("animations/hourglass.json")
+lottie_file = lottie.load_from_file("./animations/hourglass.json")
 
 st.title("Test Lottie Animation")
 lottie.display_lottie(lottie_file)
