@@ -109,8 +109,8 @@ class UI:
                     "Please provide your name, select image type, and upload images."
                 )
 
-    def save_uploaded_file(self, uploaded_file, contributor_name, image_type):
-        """Save the uploaded file to the appropriate directory."""
+    def save_uploaded_file(self, uploaded_file, contributor_name, image_type, target_height=(800)):
+        """Save the uploaded file to the appropriate directory and resize it."""
         # Ensure the directory exists
         save_dir = Path(f"images/{image_type}")
         save_dir.mkdir(parents=True, exist_ok=True)
@@ -123,9 +123,21 @@ class UI:
         file_count = len(existing_files) + 1
         save_path = save_dir / f"{contributor_name}_{file_count}{file_extension}"
 
-        # Save the file
-        with open(save_path, "wb") as f:
+        # Save the file temporarily
+        temp_path = save_dir / f"temp_{contributor_name}_{file_count}{file_extension}"
+        with open(temp_path, "wb") as f:
             f.write(uploaded_file.getbuffer())
+
+        # Open the saved image and resize it to the target height while maintaining aspect ratio
+        with Image.open(temp_path) as img:
+        # Calculate the new width based on the target height and original aspect ratio
+            aspect_ratio = img.width / img.height
+            new_width = int(target_height * aspect_ratio)
+            img = img.resize((new_width, target_height), Image.LANCZOS)
+            img.save(save_path)
+
+        # Remove the temporary file
+        os.remove(temp_path)
 
         # Add to database
         self.db.add_image(
