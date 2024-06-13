@@ -1,6 +1,6 @@
 import streamlit as st
 # from utils.Ui_file import UI
-from utils.Game_file import Game
+from utils.Game_file import GameTinder
 from utils.Database_file import Database
 
 # initializing database instance and refreshing images
@@ -12,7 +12,7 @@ from utils.Database_file import Database
 
 db = Database()
 db.refresh_images()
-game = Game(db)
+game = GameTinder(db)
 
 game.display_play_page()
 
