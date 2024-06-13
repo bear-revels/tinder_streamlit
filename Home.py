@@ -2,17 +2,22 @@ import streamlit as st
 from utils.Database_file import Database
 from utils.Elo_file import Elo
 # from utils.Game_file import Game
-from utils.Ui_file import UI
+# from utils.Ui_file import UI
+from utils.Home_file import Home
 
 
 def main():
     st.title("ARCADE")
 
+    # db = Database()
+    # db.refresh_images()
+    # ui = UI(db)
+    # ui.display_home_page(db)
+    
     db = Database()
-    db.refresh_images()
-    ui = UI(db)
+    home = Home(db)
 
-    ui.display_home_page()
+    home.display_home_page()
 
     # pages = {
     #     "Home": ui.display_home_page,
