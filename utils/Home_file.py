@@ -18,7 +18,7 @@ class Home:
         col1, col2, col3, col4 = st.columns(4)
         with col1:
             st.write("Play")
-            st.page_link("./pages/1_🎮_Facesmash_GAME.py", label="Facesmash",icon="🎮")
+            st.page_link("./pages/1_🎮_Facemash_GAME.py", label="Facesmash",icon="🎮")
         
         with col2:
             st.write("Play")

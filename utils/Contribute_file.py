@@ -8,6 +8,17 @@ class Contribute:
     def __init__(self, db):
         """Initialize the Contribute class with a database instance."""
         self.db = db
+        # Initialize session state
+        if 'name' not in st.session_state:
+            st.session_state.name = ""
+        if 'authenticated' not in st.session_state:
+            st.session_state.authenticated = False
+        if 'upload_mode' not in st.session_state:
+            st.session_state.upload_mode = None
+        if 'last_image_number' not in st.session_state:
+            st.session_state.last_image_number = 0
+        if 'uploaded_files' not in st.session_state:
+            st.session_state.uploaded_files = []
 
     def display_contribute_page(self):
         """Display the contribute page where users can upload images."""
@@ -16,32 +27,37 @@ class Contribute:
         if not self.check_password():
             st.stop()
 
-        contributor_name = st.text_input(
-            "Please enter your name to add images to the game:"
-        )
-        image_type = st.selectbox("Select the type of image:", ["Real", "GenAI"])
-        uploaded_files = st.file_uploader(
-            "Upload images:", type=["jpg", "jpeg", "png"], accept_multiple_files=True
-        )
+        if not st.session_state.name:
+            st.title("Enter your name")
+            name = st.text_input("Name")
+            if st.button("Submit"):
+                if name:
+                    st.session_state.name = name
+                    st.experimental_rerun()
+                else:
+                    st.error("Please enter your name.")
+        else:
+            if st.session_state.upload_mode is None:
+                self.select_image_type()
+            elif st.session_state.show_upload:
+                st.title(f"Upload {st.session_state.upload_mode} Images")
+                uploaded_files = st.file_uploader("Choose images...", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
+                if uploaded_files:
+                    st.session_state.uploaded_files = uploaded_files
+                    for uploaded_file in uploaded_files:
+                        st.write(uploaded_file.name)
 
-        if st.button("Submit"):
-            if contributor_name and image_type and uploaded_files:
-                for uploaded_file in uploaded_files:
-                    self.save_uploaded_file(
-                        uploaded_file, contributor_name, image_type.lower()
-                    )
-                st.write("Images uploaded successfully!")
-                st.success("Thank you! Your image(s) have been uploaded!")
-                st.session_state.show_upload = False  # Hide the parts used before
-                st.session_state.upload_mode = None  # Reset upload mode
-                st.session_state.last_image_number = 0  # Reset last image number
-                st.experimental_rerun()  # Rerun the app to show initial screen
-        
+                    if st.button("Submit image(s)"):
+                        for uploaded_file in st.session_state.uploaded_files:
+                            self.save_uploaded_file(uploaded_file, st.session_state.name, st.session_state.upload_mode.lower())
+                        st.success("Thank you! Your image(s) have been uploaded!")
+                        st.session_state.show_upload = False  # Hide the parts used before
+                        st.session_state.upload_mode = None  # Reset upload mode
+                        st.session_state.last_image_number = 0  # Reset last image number
+                        st.experimental_rerun()  # Rerun the app to show initial screen
             else:
-                st.error(
-                    "Please provide your name, select image type, and upload images."
-                )
-    
+                st.title("Upload in progress...")
+
     def check_password(self):
         """Returns `True` if the user had the correct password."""
 
@@ -67,7 +83,17 @@ class Contribute:
             st.error("😕 Password incorrect")
         return False
 
-    def save_uploaded_file(self, uploaded_file, contributor_name, image_type, target_height=(800)):
+    def select_image_type(self):
+        st.session_state.show_upload = True
+        st.title("Select Image Type")
+        if st.button("GenAI"):
+            st.session_state.upload_mode = "GenAI"
+            st.experimental_rerun()
+        if st.button("Real"):
+            st.session_state.upload_mode = "Real"
+            st.experimental_rerun()
+
+    def save_uploaded_file(self, uploaded_file, contributor_name, image_type, target_height=800):
         """Save the uploaded file to the appropriate directory and resize it."""
         # Ensure the directory exists
         save_dir = Path(f"images/{image_type}")
@@ -88,7 +114,6 @@ class Contribute:
 
         # Open the saved image and resize it to the target height while maintaining aspect ratio
         with Image.open(temp_path) as img:
-        # Calculate the new width based on the target height and original aspect ratio
             aspect_ratio = img.width / img.height
             new_width = int(target_height * aspect_ratio)
             img = img.resize((new_width, target_height), Image.LANCZOS)
@@ -104,7 +129,9 @@ class Contribute:
             str(save_path).replace("\\", "/"),
         )
 
-    
+# Instantiate the Contribute class with a dummy database object
+# db = YourDatabaseClass()
+# contribute = Contribute(db)
 
-
-
+# Uncomment the line below to actually run the app
+# contribute.display_contribute_page()

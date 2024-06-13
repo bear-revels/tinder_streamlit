@@ -67,40 +67,69 @@ class Database:
 
         cursor = self.conn.cursor()
 
+        # Set all images to inactive before refreshing
+        cursor.execute("UPDATE images SET is_active = 0")
+    
+        # Check and update real images
         for img_path in real_path.glob("*"):
-            creator_name = img_path.stem.split("_")[0]
-            cursor.execute(
-                "INSERT OR IGNORE INTO creators (creator_name) VALUES (?)",
-                (creator_name,),
-            )
-            cursor.execute(
-                "SELECT creator_id FROM creators WHERE creator_name = ?",
-                (creator_name,),
-            )
-            creator_id = cursor.fetchone()[0]
-            cursor.execute(
-                "INSERT OR IGNORE INTO images (creator_id, is_real, is_active, filepath) VALUES (?, 1, 1, ?)",
-                (creator_id, str(img_path).replace("\\", "/")),
-            )
+            if img_path.is_file():
+                creator_name = img_path.stem.split("_")[0]
+                cursor.execute(
+                    "INSERT OR IGNORE INTO creators (creator_name) VALUES (?)",
+                    (creator_name,),
+                )
+                cursor.execute(
+                    "SELECT creator_id FROM creators WHERE creator_name = ?",
+                    (creator_name,),
+                )
+                creator_id = cursor.fetchone()[0]
+                cursor.execute(
+                    """
+                    INSERT OR IGNORE INTO images (creator_id, is_real, is_active, filepath) 
+                    VALUES (?, 1, 1, ?)
+                    """,
+                    (creator_id, str(img_path).replace("\\", "/")),
+                )
+                cursor.execute(
+                    """
+                    UPDATE images SET is_active = 1 
+                    WHERE filepath = ?
+                    """,
+                    (str(img_path).replace("\\", "/"),)
+                )
 
+        # Check and update AI images
         for img_path in genai_path.glob("*"):
-            creator_name = img_path.stem.split("_")[0]
-            cursor.execute(
-                "INSERT OR IGNORE INTO creators (creator_name) VALUES (?)",
-                (creator_name,),
-            )
-            cursor.execute(
-                "SELECT creator_id FROM creators WHERE creator_name = ?",
-                (creator_name,),
-            )
-            creator_id = cursor.fetchone()[0]
-            cursor.execute(
-                "INSERT OR IGNORE INTO images (creator_id, is_real, is_active, filepath) VALUES (?, 0, 1, ?)",
-                (creator_id, str(img_path).replace("\\", "/")),
-            )
+            if img_path.is_file():
+                creator_name = img_path.stem.split("_")[0]
+                cursor.execute(
+                    "INSERT OR IGNORE INTO creators (creator_name) VALUES (?)",
+                    (creator_name,),
+                )
+                cursor.execute(
+                    "SELECT creator_id FROM creators WHERE creator_name = ?",
+                    (creator_name,),
+                )
+                creator_id = cursor.fetchone()[0]
+                cursor.execute(
+                    """
+                    INSERT OR IGNORE INTO images (creator_id, is_real, is_active, filepath) 
+                    VALUES (?, 0, 1, ?)
+                    """,
+                    (creator_id, str(img_path).replace("\\", "/")),
+                )
+                cursor.execute(
+                    """
+                    UPDATE images SET is_active = 1 
+                    WHERE filepath = ?
+                    """,
+                    (str(img_path).replace("\\", "/"),)
+                )
 
         self.conn.commit()
 
+    
+#--------------------------
     def get_random_images(self):
         """Get a pair of random images (one real and one AI)."""
         cursor = self.conn.cursor()
