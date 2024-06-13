@@ -15,14 +15,19 @@ class Home:
         st.write("🔥 So, what are you waiting for? Step into the future of gaming, where innovation thrives, creativity reigns supreme, and every click brings you closer to greatness. Join us now and unleash your inner visionary on an adventure like no other!")
 
         #display animation at specific place via COLUMNS
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3, col4 = st.columns(4)
         with col1:
             st.write("Play")
-            st.page_link("./pages/1_🎮_GAME.py", label="Game",icon="🎮")
+            st.page_link("./pages/1_🎮_Facesmash_GAME.py", label="Facesmash",icon="🎮")
+        
         with col2:
+            st.write("Play")
+            st.page_link("./pages/1_🎮_Tinder_GAME.py", label="Tinder",icon="🎮")
+
+        with col3:
             st.write("Contribute")
             st.page_link("./pages/2_⬆️_Contribute.py", label="upload",icon="⬆️")
-        with col3:
+        with col4:
             st.write("Leaderboard")
             st.page_link("./pages/3_🏆_Leaderboard.py", label="board",icon="🏆")
         
