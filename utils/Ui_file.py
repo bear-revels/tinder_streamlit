@@ -178,8 +178,8 @@ class UI:
     #         str(save_path).replace("\\", "/"),
     #     )
 
-    def display_leaderboard_page(self):
-        """Display the leaderboard page."""
-        st.write("Leaderboard")
-        leaderboard_data = self.db.get_leaderboard()
-        st.write(leaderboard_data)
+    # def display_leaderboard_page(self):
+    #     """Display the leaderboard page."""
+    #     st.write("Leaderboard")
+    #     leaderboard_data = self.db.get_leaderboard()
+    #     st.write(leaderboard_data)

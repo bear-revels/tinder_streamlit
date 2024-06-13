@@ -1,5 +1,4 @@
 import streamlit as st
-import random
 from pathlib import Path
 import os
 from PIL import Image
@@ -10,6 +9,39 @@ class Contribute:
         """Initialize the Contribute class with a database instance."""
         self.db = db
 
+    def display_contribute_page(self):
+        """Display the contribute page where users can upload images."""
+        st.write("Contribute your images to the game!")
+
+        if not self.check_password():
+            st.stop()
+
+        contributor_name = st.text_input(
+            "Please enter your name to add images to the game:"
+        )
+        image_type = st.selectbox("Select the type of image:", ["Real", "GenAI"])
+        uploaded_files = st.file_uploader(
+            "Upload images:", type=["jpg", "jpeg", "png"], accept_multiple_files=True
+        )
+
+        if st.button("Submit"):
+            if contributor_name and image_type and uploaded_files:
+                for uploaded_file in uploaded_files:
+                    self.save_uploaded_file(
+                        uploaded_file, contributor_name, image_type.lower()
+                    )
+                st.write("Images uploaded successfully!")
+                st.success("Thank you! Your image(s) have been uploaded!")
+                st.session_state.show_upload = False  # Hide the parts used before
+                st.session_state.upload_mode = None  # Reset upload mode
+                st.session_state.last_image_number = 0  # Reset last image number
+                st.experimental_rerun()  # Rerun the app to show initial screen
+        
+            else:
+                st.error(
+                    "Please provide your name, select image type, and upload images."
+                )
+    
     def check_password(self):
         """Returns `True` if the user had the correct password."""
 
@@ -34,33 +66,6 @@ class Contribute:
         if "password_correct" in st.session_state:
             st.error("😕 Password incorrect")
         return False
-    
-    def display_contribute_page(self):
-        """Display the contribute page where users can upload images."""
-        st.write("Contribute your images to the game!")
-
-        if not self.check_password():
-            st.stop()
-
-        contributor_name = st.text_input(
-            "Please enter your name to add images to the game:"
-        )
-        image_type = st.selectbox("Select the type of image:", ["Real", "GenAI"])
-        uploaded_files = st.file_uploader(
-            "Upload images:", type=["jpg", "jpeg", "png"], accept_multiple_files=True
-        )
-
-        if st.button("Submit"):
-            if contributor_name and image_type and uploaded_files:
-                for uploaded_file in uploaded_files:
-                    self.save_uploaded_file(
-                        uploaded_file, contributor_name, image_type.lower()
-                    )
-                st.write("Images uploaded successfully!")
-            else:
-                st.write(
-                    "Please provide your name, select image type, and upload images."
-                )
 
     def save_uploaded_file(self, uploaded_file, contributor_name, image_type, target_height=(800)):
         """Save the uploaded file to the appropriate directory and resize it."""
