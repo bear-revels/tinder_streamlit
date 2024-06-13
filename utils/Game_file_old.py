@@ -4,9 +4,9 @@ from .Database_file import Database
 
 
 class Game:
-    def __init__(self, db):
+    def __init__(self):
         """Initialize the Game class with a database instance."""
-        self.db = db
+        self.db = Database()
 
     def display_play_page(self):
         """Display the game play page."""
@@ -22,29 +22,21 @@ class Game:
             st.session_state.level = 1
             st.session_state.score = 0
             st.session_state.timer = 30
-
-        real_image, genai_image = self.db.get_random_images()
+        #
+        real_image = self.db.select_images_real()
+        genai_image = self.db.select_images_real()
         images = [(real_image, 1), (genai_image, 0)]
         random.shuffle(images)
 
         col1, col2 = st.columns(2)
-        # with col1:
-        #     if st.button("Select Left Image", key="left"):
-        #         self.check_selection(images[0][1] == 1)
-        #     st.image(images[0][0][4], use_column_width=True)
-        # with col2:
-        #     if st.button("Select Right Image", key="right"):
-        #         self.check_selection(images[1][1] == 1)
-        #     st.image(images[1][0][4], use_column_width=True)
-
         with col1:
-            if st.button("Select Left Image", key=f"left_{st.session_state.level}"):
+            if st.button("Select Left Image", key="left"):
                 self.check_selection(images[0][1] == 1)
-            st.image(images[0][0][4], use_column_width=True)
+            st.image(images[0][0][0]['filepath'], use_column_width=False)
         with col2:
-            if st.button("Select Right Image", key=f"right_{st.session_state.level}"):
+            if st.button("Select Right Image", key="right"):
                 self.check_selection(images[1][1] == 1)
-            st.image(images[1][0][4], use_column_width=True)  
+            st.image(images[1][0][0]['filepath'], use_column_width=False)
 
     def check_selection(self, is_real_image):
         """Check the user's selection and update the game state."""
@@ -58,7 +50,3 @@ class Game:
             st.write("Wrong! Game Over!")
             st.write(f"Your final score: {st.session_state.score}")
             st.session_state.page = "home"
-  
-
-
-    
