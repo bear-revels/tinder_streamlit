@@ -63,7 +63,7 @@ class Database:
     def refresh_images(self):
         """Refresh image list from directories and update the database."""
         real_path = Path("images/real")
-        genai_path = Path("images/genAI")
+        genai_path = Path("images/genai")
 
         cursor = self.conn.cursor()
 

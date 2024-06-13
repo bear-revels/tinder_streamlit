@@ -83,14 +83,23 @@ class UI:
         random.shuffle(images)
 
         col1, col2 = st.columns(2)
+        # with col1:
+        #     if st.button("Select Left Image", key="left"):
+        #         self.check_selection(images[0][1] == 1)
+        #     st.image(images[0][0][4], use_column_width=True)
+        # with col2:
+        #     if st.button("Select Right Image", key="right"):
+        #         self.check_selection(images[1][1] == 1)
+        #     st.image(images[1][0][4], use_column_width=True)
+
         with col1:
-            if st.button("Select Left Image", key="left"):
+            if st.button("Select Left Image", key=f"left_{st.session_state.level}"):
                 self.check_selection(images[0][1] == 1)
             st.image(images[0][0][4], use_column_width=True)
         with col2:
-            if st.button("Select Right Image", key="right"):
+            if st.button("Select Right Image", key=f"right_{st.session_state.level}"):
                 self.check_selection(images[1][1] == 1)
-            st.image(images[1][0][4], use_column_width=True)
+            st.image(images[1][0][4], use_column_width=True)    
 
     def check_selection(self, is_real_image):
         """Check the user's selection and update the game state."""
