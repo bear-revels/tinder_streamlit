@@ -32,8 +32,8 @@ class Elo:
         e1 = 1.0 / (1 + 10**(r1 / 400))
         e2 = 1.0 / (1 + 10**(r2 / 400))
         
-        new_winner_score = winner_score + K * (1 - e1)
-        new_loser_score = loser_score + K * (0 - e2)
+        new_winner_score = round(winner_score + K * (1 - e1))
+        new_loser_score = round(loser_score + K * (0 - e2))
         
         return new_winner_score, new_loser_score
 
