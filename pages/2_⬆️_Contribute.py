@@ -1,5 +1,4 @@
 import streamlit as st
-# from utils.Game_file import Game
 from utils.Database_file import Database
 from utils.Contribute_file import Contribute
 

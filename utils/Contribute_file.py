@@ -3,6 +3,7 @@ from pathlib import Path
 import os
 from PIL import Image
 import hmac
+import time
 
 class Contribute:
     def __init__(self, db):
@@ -50,10 +51,12 @@ class Contribute:
                     if st.button("Submit image(s)"):
                         for uploaded_file in st.session_state.uploaded_files:
                             self.save_uploaded_file(uploaded_file, st.session_state.name, st.session_state.upload_mode.lower())
+                        st.balloons()
                         st.success("Thank you! Your image(s) have been uploaded!")
                         st.session_state.show_upload = False  # Hide the parts used before
                         st.session_state.upload_mode = None  # Reset upload mode
                         st.session_state.last_image_number = 0  # Reset last image number
+                        time.sleep(2)  # Add a short delay to ensure balloons are visible
                         st.experimental_rerun()  # Rerun the app to show initial screen
             else:
                 st.title("Upload in progress...")
@@ -128,10 +131,3 @@ class Contribute:
             1 if image_type == "real" else 0,
             str(save_path).replace("\\", "/"),
         )
-
-# Instantiate the Contribute class with a dummy database object
-# db = YourDatabaseClass()
-# contribute = Contribute(db)
-
-# Uncomment the line below to actually run the app
-# contribute.display_contribute_page()
