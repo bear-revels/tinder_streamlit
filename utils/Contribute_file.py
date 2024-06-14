@@ -128,10 +128,3 @@ class Contribute:
             1 if image_type == "real" else 0,
             str(save_path).replace("\\", "/"),
         )
-
-# Instantiate the Contribute class with a dummy database object
-# db = YourDatabaseClass()
-# contribute = Contribute(db)
-
-# Uncomment the line below to actually run the app
-# contribute.display_contribute_page()
