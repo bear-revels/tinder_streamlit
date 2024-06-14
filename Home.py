@@ -8,7 +8,6 @@ from utils.Home_file import Home
 
 def main():
     st.title("ARCADE")
-
     # db = Database()
     # db.refresh_images()
     # ui = UI(db)
