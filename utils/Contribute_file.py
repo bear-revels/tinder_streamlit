@@ -3,6 +3,7 @@ from pathlib import Path
 import os
 from PIL import Image
 import hmac
+import time
 
 class Contribute:
     def __init__(self, db):
@@ -55,6 +56,7 @@ class Contribute:
                         st.session_state.show_upload = False  # Hide the parts used before
                         st.session_state.upload_mode = None  # Reset upload mode
                         st.session_state.last_image_number = 0  # Reset last image number
+                        time.sleep(2)  # Add a short delay to ensure balloons are visible
                         st.experimental_rerun()  # Rerun the app to show initial screen
             else:
                 st.title("Upload in progress...")
