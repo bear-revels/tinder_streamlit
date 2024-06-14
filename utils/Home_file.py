@@ -35,8 +35,14 @@ class Home:
             st.write("Leaderboard")
             st.page_link("./pages/3_🏆_Leaderboard.py", label="board",icon="🏆")
         
-        st.sidebar.write("Made by students @BecodeGhent:")
+        st.sidebar.write("Acknowledgements")
+        st.sidebar.write("This project was developed by the dedicated students of Becode Ghent:")
         st.sidebar.write("Bear, Caroline, Nathalie, Niels")
-        st.sidebar.write("Shout out to the other collegues for generating the images:")
-        st.sidebar.write("??")
-        st.sidebar.write("©️copyrights")
+
+        st.sidebar.write("We extend our heartfelt thanks to the entire #Arai6 team for their invaluable contributions and support in generating the images and providing continuous encouragement throughout this project.")
+        st.sidebar.write("Special Thanks")
+        st.sidebar.write("We are grateful to all our colleagues and mentors for their guidance and inspiration.")
+        st.sidebar.write("Copyright")
+        st.sidebar.write("© 2024 Becode Ghent. All rights reserved")
+
+
