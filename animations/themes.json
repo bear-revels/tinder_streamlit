@@ -1,0 +1,22 @@
+
+{
+    "black": {
+        "primaryColor": "#000000",
+        "backgroundColor": "#000000",
+        "secondaryBackgroundColor": "#000000",
+        "textColor": "#000000",
+        "font": "sans serif"
+    },
+
+    "orange": {
+        "primaryColor":"#f16e00",
+        "backgroundColor":"#EDBB99",
+        "secondaryBackgroundColor":"#f16e00",
+        "textColor":"#EDBB99",
+        "font":"sans serif",
+        "buttonColor":"#f16e00",
+        "buttonText":"#EDBB99"
+
+    }
+
+}
