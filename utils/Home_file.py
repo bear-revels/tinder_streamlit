@@ -9,9 +9,9 @@ class Home:
         """Display the home page with navigation tiles."""
         col1,col2 = st.columns(2)
         with col1:
-            st.video("./animations/Olga_Orange_ING.mp4", start_time=20, format="video/mp4", subtitles={"English": "./animations/olga.vtt"})
+            st.video("./animations/Olga.mp4", start_time=20, format="video/mp4", subtitles={"English": "./animations/olga.vtt"})
         with col2:
-            st.write("Welcome to the Arcade!")
+            st.header("Welcome to the Arcade!")
             st.write("🚀 Welcome to the cutting-edge intersection of AI creativity and interactive gaming! Get ready to embark on an electrifying journey through a digital realm where imagination knows no bounds and excitement knows no limits.")
             st.write("🎨 Dive into a mesmerizing universe where every pixel pulsates with the brilliance of AI-generated imagery. Immerse yourself in a symphony of colors, shapes, and textures, each crafted by the boundless creativity of artificial intelligence.")
             st.write("🌟 But wait, there's more! Prepare to put your discerning eye to the test in our exhilarating game of visual mastery. Your mission? To sift through a stunning array of AI-generated images and select the true masterpieces from the crowd. With each astute choice, you'll earn points, climb the ranks, and solidify your status as a connoisseur of digital art.")
@@ -35,14 +35,14 @@ class Home:
             st.write("Leaderboard")
             st.page_link("./pages/3_🏆_Leaderboard.py", label="board",icon="🏆")
         
-        st.sidebar.write("Acknowledgements")
+        st.sidebar.subheader("Acknowledgements")
         st.sidebar.write("This project was developed by the dedicated students of Becode Ghent:")
         st.sidebar.write("Bear, Caroline, Nathalie, Niels")
 
         st.sidebar.write("We extend our heartfelt thanks to the entire #Arai6 team for their invaluable contributions and support in generating the images and providing continuous encouragement throughout this project.")
-        st.sidebar.write("Special Thanks")
+        st.sidebar.subheader("Special Thanks")
         st.sidebar.write("We are grateful to all our colleagues and mentors for their guidance and inspiration.")
-        st.sidebar.write("Copyright")
+        st.sidebar.subheader("Copyright")
         st.sidebar.write("© 2024 Becode Ghent. All rights reserved")
 
 
