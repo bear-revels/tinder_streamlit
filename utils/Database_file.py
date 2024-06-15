@@ -448,3 +448,16 @@ class Database:
                 )
 
         self.conn.commit()
+    
+    def get_random_images(self):
+        """Get a pair of random images (one real and one AI)."""
+        cursor = self.conn.cursor()
+        cursor.execute(
+            "SELECT * FROM images WHERE is_active = 1 AND is_real = 1 ORDER BY RANDOM() LIMIT 1"
+        )
+        real_image = cursor.fetchone()
+        cursor.execute(
+            "SELECT * FROM images WHERE is_active = 1 AND is_real = 0 ORDER BY RANDOM() LIMIT 1"
+        )
+        genai_image = cursor.fetchone()
+        return real_image, genai_image

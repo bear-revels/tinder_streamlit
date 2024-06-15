@@ -5,19 +5,40 @@ from .Leaderboard_file import Leaderboard
 
 
 class GameTinder:
-    def __init__(self, db):
+    def __init__(self):
         """Initialize the Game class with a database instance."""
-        self.db = db
+        #self.db = db
+        self.db = Database()
+        self.db.refresh_active_status()
+        self.images = self.db.get_active_images()
+        self.current_image_pair = random.sample(self.images, 2)
+        self.player_name = ""
+        self.match_count = 0
+        if 'reviewed_images' not in st.session_state:
+            st.session_state.reviewed_images = set()
+        if 'displayed_image_ids' not in st.session_state:
+            st.session_state.displayed_image_ids = set()
 
     def display_play_page(self):
         """Display the game play page."""
         st.title("Welcom to the Tinder GAME")
         st.subheader("Let's get started")
-        player_name = st.text_input("Enter your name to start playing:", "")
+        # player_name = st.text_input("Enter your name to start playing:", "")
+        # if player_name:
+        #     if "player_id" not in st.session_state:
+        #         st.session_state.player_id = self.db.add_player(player_name)
+        #     self.start_game()
+
+        player_name = st.text_input("Enter your name to start playing:", key="player_name")
         if player_name:
-            if "player_id" not in st.session_state:
-                st.session_state.player_id = self.db.add_player(player_name)
-            self.start_game()
+            game_t = GameTinder()
+            game_t.player_name = player_name
+            if 'match_count' not in st.session_state:
+                st.session_state.match_count = 0
+            if 'current_image_pair' not in st.session_state:
+                st.session_state.current_image_pair = game_t.current_image_pair
+            GameTinder.start_game(game_t)
+
 
     def start_game(self):
         """Start the game and handle game logic."""
