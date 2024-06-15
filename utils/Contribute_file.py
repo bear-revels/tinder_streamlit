@@ -23,13 +23,13 @@ class Contribute:
 
     def display_contribute_page(self):
         """Display the contribute page where users can upload images."""
-        st.write("Contribute your images to the game!")
+        st.title("Add your images to the game!")
 
         if not self.check_password():
             st.stop()
 
         if not st.session_state.name:
-            st.title("Enter your name")
+            st.subheader("Enter your name")
             name = st.text_input("Name")
             if st.button("Submit"):
                 if name:
@@ -41,7 +41,7 @@ class Contribute:
             if st.session_state.upload_mode is None:
                 self.select_image_type()
             elif st.session_state.show_upload:
-                st.title(f"Upload {st.session_state.upload_mode} Images")
+                st.subheader(f"Upload {st.session_state.upload_mode} Images")
                 uploaded_files = st.file_uploader("Choose images...", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
                 if uploaded_files:
                     st.session_state.uploaded_files = uploaded_files
@@ -79,8 +79,9 @@ class Contribute:
             return True
 
         # Show input for password.
+        st.text("If you are allowed to add images, you reseved a password from the admin.")
         st.text_input(
-            "Password", type="password", on_change=password_entered, key="password"
+            "Enter the given password here:", type="password", on_change=password_entered, key="password"
         )
         if "password_correct" in st.session_state:
             st.error("😕 Password incorrect")
@@ -88,7 +89,7 @@ class Contribute:
 
     def select_image_type(self):
         st.session_state.show_upload = True
-        st.title("Select Image Type")
+        st.subheader("Select Image Type you want to upload")
         if st.button("GenAI"):
             st.session_state.upload_mode = "GenAI"
             st.experimental_rerun()
