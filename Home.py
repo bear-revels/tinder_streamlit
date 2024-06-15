@@ -3,9 +3,10 @@ from utils.Database_file import Database
 from archive.Elo_file import Elo
 from utils.Home_file import Home
 
+st.set_page_config(layout="wide")
 
 def main():
-    st.title("ARCADE")
+    st.title("Welcome to the Arcade!")
     
     db = Database()
     # db.refresh_images()

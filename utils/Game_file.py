@@ -11,6 +11,8 @@ class GameTinder:
 
     def display_play_page(self):
         """Display the game play page."""
+        st.title("Welcom to the Tinder GAME")
+        st.subheader("Let's get started")
         player_name = st.text_input("Enter your name to start playing:", "")
         if player_name:
             if "player_id" not in st.session_state:
@@ -78,7 +80,17 @@ class GameFacemash:
     @staticmethod
     def display_game_page():
         """Displays the game page."""
-        st.title("Game Page")
+        st.title("Welcom to the FaceMash GAME")
+        st.subheader("Let's get started")
+
+        #video from youtube: why facemash?
+        st.text("This game is based on the film The Social Network. ")
+        video_url = "https://www.youtube.com/embed/kKqu1PgpjY4?start=54&end=81"
+        video_html = f"""
+        <iframe width="560" height="315" src="{video_url}" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        """
+        st.markdown(video_html, unsafe_allow_html=True)
+
         player_name = st.text_input("Enter your name to start playing:", key="player_name")
         
         # if player_name:
@@ -121,10 +133,10 @@ class GameFacemash:
             col1, col2 = st.columns(2)
 
             with col1:
-                if st.button("Choose Image 1"):
+                if st.button("👇 Choose 👇"):
                     game.process_choice(st.session_state.current_image_pair[0], st.session_state.current_image_pair[1])
             with col2:
-                if st.button("Choose Image 2"):
+                if st.button(" 👇 Choose 👇"):
                     game.process_choice(st.session_state.current_image_pair[1], st.session_state.current_image_pair[0])
 
             col1.image(st.session_state.current_image_pair[0]['filepath'], use_column_width=True)
@@ -143,12 +155,12 @@ class GameFacemash:
         
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("Continue playing"):
+            if st.button("🎮  Continue playing"):
                 st.session_state.match_count = 0
                 st.session_state.reviewed_images = set()
                 st.rerun()
         with col2:
-            if st.button("View full leaderboard"):
+            if st.button("🏆  View full leaderboard"):
                 st.switch_page("./pages/3_🏆_Leaderboard.py")
 
         st.write("Top 5 Images You Reviewed:")
