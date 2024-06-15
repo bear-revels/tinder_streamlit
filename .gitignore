@@ -168,6 +168,7 @@ arcade.db
 Video_file.py
 Theme_file.py
 Wide_file.py
+Tinder_file.py
 #animations
 background.avif
 background2.webp
