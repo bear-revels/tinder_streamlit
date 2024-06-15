@@ -23,11 +23,6 @@ class GameTinder:
         """Display the game play page."""
         st.title("Welcom to the Tinder GAME")
         st.subheader("Let's get started")
-        # player_name = st.text_input("Enter your name to start playing:", "")
-        # if player_name:
-        #     if "player_id" not in st.session_state:
-        #         st.session_state.player_id = self.db.add_player(player_name)
-        #     self.start_game()
 
         player_name = st.text_input("Enter your name to start playing:", key="player_name")
         if player_name:
@@ -51,37 +46,47 @@ class GameTinder:
         images = [(real_image, 1), (genai_image, 0)]
         random.shuffle(images)
 
-        col1, col2 = st.columns(2)
-        # with col1:
-        #     if st.button("Select Left Image", key="left"):
-        #         self.check_selection(images[0][1] == 1)
-        #     st.image(images[0][0][4], use_column_width=True)
-        # with col2:
-        #     if st.button("Select Right Image", key="right"):
-        #         self.check_selection(images[1][1] == 1)
-        #     st.image(images[1][0][4], use_column_width=True)
+        #unique keys:
+        left_button_key = f"left_{st.session_state.level}"
+        right_button_key = f"right_{st.session_state.level}"
 
+        col1, col2 = st.columns(2)
         with col1:
-            if st.button("Select Left Image", key=f"left_{st.session_state.level}"):
+            if st.button("Select Left Image", key=left_button_key):
                 self.check_selection(images[0][1] == 1)
             st.image(images[0][0][4], use_column_width=True)
         with col2:
-            if st.button("Select Right Image", key=f"right_{st.session_state.level}"):
+            if st.button("Select Right Image", key=right_button_key):
                 self.check_selection(images[1][1] == 1)
-            st.image(images[1][0][4], use_column_width=True)  
+            st.image(images[1][0][4], use_column_width=True)
 
     def check_selection(self, is_real_image):
-        """Check the user's selection and update the game state."""
         if is_real_image:
             st.session_state.score += 1
             st.session_state.level += 1
             st.session_state.timer *= 0.9
             st.write(f"Correct! Your current score: {st.session_state.score}")
-            self.start_game()
         else:
             st.write("Wrong! Game Over!")
             st.write(f"Your final score: {st.session_state.score}")
             st.session_state.page = "home"
+        
+        if st.session_state.page != "home":
+            self.start_game()
+
+
+    # def check_selection(self, is_real_image):
+    #     """Check the user's selection and update the game state."""
+    #     if is_real_image:
+    #         st.session_state.score += 1
+    #         st.session_state.level += 1
+    #         st.session_state.timer *= 0.9
+    #         st.write(f"Correct! Your current score: {st.session_state.score}")
+    #         self.start_game()
+    #     else:
+    #         st.write("Wrong! Game Over!")
+    #         st.write(f"Your final score: {st.session_state.score}")
+    #         st.session_state.page = "home"
   
 class GameFacemash:
     """Class to handle the game functionality."""
