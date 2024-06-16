@@ -17,11 +17,13 @@ This app is a web application built with Streamlit, a Python library for buildin
 ├── Home.py
 ├── README.md
 ├── animations
+│   ├── Olga.mp4
 │   ├── background.avif
 │   ├── background2.webp
 │   ├── bg3.jpg
 │   ├── hourglass.json
-│   └── style.css
+│   ├── style.css
+│   └── themes.json
 ├── arcade.db
 ├── images
 │   ├── genai
@@ -37,16 +39,18 @@ This app is a web application built with Streamlit, a Python library for buildin
 │       ├── pexel_1.jpg
 │       └── ...
 ├── pages
-│   ├── 1_🎮_GAME.py
+│   ├── 1_🎮_Facemash_GAME.py
+│   ├── 1_🎮_Tinder_GAME.py
 │   ├── 2_⬆️_Contribute.py
 │   └── 3_🏆_Leaderboard.py
 ├── requirements.txt
 └── utils
+    ├── Contribute_file.py
     ├── Database_file.py
-    ├── Elo_file.py
     ├── Game_file.py
-    ├── Test_file.py
-    ├── Ui_file.py
+    ├── Home_file.py
+    ├── Leaderboard_file.py
+    ├── Theme_file.py
     ├── __init__.py
     └── __pycache__
 ```
