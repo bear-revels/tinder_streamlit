@@ -79,7 +79,7 @@ class Contribute:
             return True
 
         # Show input for password.
-        st.text("If you are allowed to add images, you reseved a password from the admin.")
+        st.text("If you are allowed to add images, you received a password from the admin.")
         st.text_input(
             "Enter the given password here:", type="password", on_change=password_entered, key="password"
         )
