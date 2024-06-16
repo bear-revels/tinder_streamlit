@@ -25,6 +25,12 @@ class GameTinder:
             st.session_state.current_image_pair_t = []
         if 'page' not in st.session_state:
             st.session_state.page = "play"
+        if 'score' not in st.session_state:
+            st.session_state.score = 0
+        if 'level' not in st.session_state:
+            st.session_state.level = 1
+        if 'lives' not in st.session_state:
+            st.session_state.lives = 3
 
     def display_play_page(self):
         """Display the game play page."""
@@ -88,7 +94,7 @@ class GameTinder:
             else:
                 st.write("Game Over!")
                 st.write(f"Your final score: {st.session_state.score}")
-                self.update_leaderboard()
+                #self.update_leaderboard()
                 st.session_state.page = "play"
                 return
         #self.display_images()
