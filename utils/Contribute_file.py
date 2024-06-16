@@ -34,7 +34,7 @@ class Contribute:
             if st.button("Submit"):
                 if name:
                     st.session_state.name = name
-                    st.experimental_rerun()
+                    st.rerun()
                 else:
                     st.error("Please enter your name.")
         else:
@@ -57,7 +57,7 @@ class Contribute:
                         st.session_state.upload_mode = None  # Reset upload mode
                         st.session_state.last_image_number = 0  # Reset last image number
                         time.sleep(2)  # Add a short delay to ensure balloons are visible
-                        st.experimental_rerun()  # Rerun the app to show initial screen
+                        st.rerun()  # Rerun the app to show initial screen
             else:
                 st.title("Upload in progress...")
 
@@ -92,10 +92,10 @@ class Contribute:
         st.subheader("Select Image Type you want to upload")
         if st.button("GenAI"):
             st.session_state.upload_mode = "GenAI"
-            st.experimental_rerun()
+            st.rerun()
         if st.button("Real"):
             st.session_state.upload_mode = "Real"
-            st.experimental_rerun()
+            st.rerun()
 
     def save_uploaded_file(self, uploaded_file, contributor_name, image_type, target_height=800):
         """Save the uploaded file to the appropriate directory and resize it."""
