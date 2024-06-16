@@ -126,9 +126,12 @@ class Contribute:
         # Remove the temporary file
         os.remove(temp_path)
 
+         # Fetch or create the creator_id
+        creator_id = self.db.get_or_create_creator(contributor_name)
+
         # Add to database
         self.db.add_image(
-            contributor_name,
+            creator_id,
             1 if image_type == "real" else 0,
             str(save_path).replace("\\", "/"),
         )
