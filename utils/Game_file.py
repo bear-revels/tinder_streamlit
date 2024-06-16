@@ -115,7 +115,7 @@ class GameFacemash:
     @staticmethod
     def display_game_page():
         """Displays the game page."""
-        st.title("Welcom to the FaceMash GAME")
+        st.title("Welcome to the FaceMash GAME")
         st.subheader("Let's get started")
 
         #video from youtube: why facemash?
