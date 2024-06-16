@@ -120,6 +120,23 @@ streamlit run app.py
 ```
 
 
+## 📦 Class diagrams
+
+These diagrams were created using https://github.com/scottrogowski/code2flow and https://dreampuf.github.io/GraphvizOnline/
+
+The separate class diagrams are as follows:
+![Database](animations/database_file.png)
+![Contribute](animations/contribute_file.png)
+![Games](animations/game_file.png)
+![Leaderboard](animations/leaderboard_file.png)
+
+The full flow of the project looks like this:
+
+![Full flow](animations/graph.png)
+
+
+
+
 ## 📌 Background
 
 This team project was completed in 5 days as part of the AI Boocamp at BeCode.org. Connect with the team behind the magic.
