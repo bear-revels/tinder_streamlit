@@ -124,6 +124,13 @@ streamlit run app.py
 
 These diagrams were created using https://github.com/scottrogowski/code2flow and https://dreampuf.github.io/GraphvizOnline/
 
+Creation of a graph can be done with the following command:
+
+```	
+code2flow Home.py utils/*.py pages/*.py
+```
+
+
 The separate class diagrams are as follows:
 ![Database](animations/database_file.png)
 ![Contribute](animations/contribute_file.png)
