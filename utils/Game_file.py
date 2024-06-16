@@ -89,10 +89,20 @@ class GameTinder:
     #         st.session_state.page = "home"
   
 class GameFacemash:
-    """Class to handle the game functionality."""
+    """Class to handle the game functionality of the Facemash game.
+
+    Attributes:
+        db (Database): Database instance.
+        images (list): List of present/active images.
+        current_image_pair (list): List of two images.
+        player_name (str): Name of the player.
+        match_count (int): Count of matches.
+        reviewed_images (set): Set of reviewed images.
+        displayed_image_ids (set): Set of displayed image IDs."""
     
     def __init__(self):
         self.db = Database()
+        self.db.refresh_images()
         self.db.refresh_active_status()
         self.images = self.db.get_active_images()
         self.current_image_pair = random.sample(self.images, 2)
@@ -110,19 +120,15 @@ class GameFacemash:
         st.subheader("Let's get started")
 
         #video from youtube: why facemash?
-        st.text("This game is based on the film The Social Network. ")
-        video_url = "https://www.youtube.com/embed/kKqu1PgpjY4?start=54&end=81"
-        video_html = f"""
-        <iframe width="560" height="315" src="{video_url}" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        """
-        st.markdown(video_html, unsafe_allow_html=True)
+        with st.expander("This game is based on the film The Social Network. Click and watch 👇"):
+            video_url = "https://www.youtube.com/embed/kKqu1PgpjY4?start=54&end=81"
+            video_html = f"""
+            <iframe width="560" height="315" src="{video_url}" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            """
+            st.markdown(video_html, unsafe_allow_html=True)
 
         player_name = st.text_input("Enter your name to start playing:", key="player_name")
-        
-        # if player_name:
-        #     game = GameFacemash()
-        #     game.player_name = player_name
-        #     GameFacemash.play_game(game)
+
         if player_name:
             game = GameFacemash()
             game.player_name = player_name
