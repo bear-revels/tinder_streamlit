@@ -135,6 +135,9 @@ class GameFacemash:
                 st.session_state.match_count = 0
             if 'current_image_pair' not in st.session_state:
                 st.session_state.current_image_pair = game.current_image_pair
+            if 'level_completed' in st.session_state and st.session_state.level_completed:
+                st.session_state.level_completed = False
+                game.reset_game_state()
             GameFacemash.play_game(game)
     
     @staticmethod
@@ -173,9 +176,11 @@ class GameFacemash:
             if st.button("🎮  Continue playing"):
                 st.session_state.match_count = 0
                 st.session_state.reviewed_images = set()
+                game.reset_game_state()
                 st.rerun()
         with col2:
             if st.button("🏆  View full leaderboard"):
+                st.session_state.level_completed = True
                 st.switch_page("./pages/3_🏆_Leaderboard.py")
 
         st.write("Top 5 Images You Reviewed:")
@@ -240,4 +245,12 @@ class GameFacemash:
     def update_image_score(self, winner, loser):
         """Update the ELO score of the chosen image."""
         Leaderboard.update_elo(winner['image_id'], loser['image_id'])
+
+    def reset_game_state(self):
+        """Reset the game state to start a new level."""
+        self.current_image_pair = random.sample(self.images, 2)
+        st.session_state.current_image_pair = self.current_image_pair
+        st.session_state.match_count = 0
+        st.session_state.reviewed_images = set()
+        st.session_state.displayed_image_ids = set()
     
