@@ -1,6 +1,5 @@
 import streamlit as st
 from utils.Database_file import Database
-from archive.Elo_file import Elo
 from utils.Home_file import Home
 
 st.set_page_config(layout="wide")
