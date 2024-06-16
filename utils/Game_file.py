@@ -3,17 +3,17 @@ import random
 from .Database_file import Database
 from .Leaderboard_file import Leaderboard
 
-
 class GameTinder:
     def __init__(self):
         """Initialize the Game class with a database instance."""
-        #self.db = db
         self.db = Database()
         self.db.refresh_active_status()
         self.images = self.db.get_active_images()
-        self.current_image_pair = random.sample(self.images, 2)
+        self.current_image_pair = []
         self.player_name = ""
-        self.match_count = 0
+        self.score = 0
+        self.level = 1
+        self.lives = 3
         if 'reviewed_images' not in st.session_state:
             st.session_state.reviewed_images = set()
         if 'displayed_image_ids' not in st.session_state:
@@ -21,72 +21,173 @@ class GameTinder:
 
     def display_play_page(self):
         """Display the game play page."""
-        st.title("Welcom to the Tinder GAME")
+        st.title("Welcome to the Tinder GAME")
         st.subheader("Let's get started")
 
         player_name = st.text_input("Enter your name to start playing:", key="player_name")
         if player_name:
-            game_t = GameTinder()
-            game_t.player_name = player_name
-            if 'match_count' not in st.session_state:
-                st.session_state.match_count = 0
-            if 'current_image_pair' not in st.session_state:
-                st.session_state.current_image_pair = game_t.current_image_pair
-            GameTinder.start_game(game_t)
-
+            self.player_name = player_name
+            self.start_game()
 
     def start_game(self):
         """Start the game and handle game logic."""
         if "level" not in st.session_state:
-            st.session_state.level = 1
             st.session_state.score = 0
-            st.session_state.timer = 30
+            st.session_state.level = 1
+            st.session_state.lives = 3
+            st.session_state.page = "play"
 
+        self.display_images()
+
+    def display_images(self):
+        """Display image selection interface."""
         real_image, genai_image = self.db.get_random_images()
-        images = [(real_image, 1), (genai_image, 0)]
-        random.shuffle(images)
+        self.current_image_pair = [(real_image, 1), (genai_image, 0)]
+        random.shuffle(self.current_image_pair)
 
-        #unique keys:
         left_button_key = f"left_{st.session_state.level}"
         right_button_key = f"right_{st.session_state.level}"
 
         col1, col2 = st.columns(2)
         with col1:
             if st.button("Select Left Image", key=left_button_key):
-                self.check_selection(images[0][1] == 1)
-            st.image(images[0][0][4], use_column_width=True)
+                st.session_state.selected_image = self.current_image_pair[0]
+                st.session_state.last_clicked = "left"
         with col2:
             if st.button("Select Right Image", key=right_button_key):
-                self.check_selection(images[1][1] == 1)
-            st.image(images[1][0][4], use_column_width=True)
+                st.session_state.selected_image = self.current_image_pair[1]
+                st.session_state.last_clicked = "right"
 
-    def check_selection(self, is_real_image):
+        if "selected_image" in st.session_state:
+            self.check_selection(st.session_state.selected_image)
+
+    def check_selection(self, selected_image):
+        """Check the user's selection and update the game state."""
+        is_real_image = selected_image[1] == 1
         if is_real_image:
             st.session_state.score += 1
             st.session_state.level += 1
-            st.session_state.timer *= 0.9
             st.write(f"Correct! Your current score: {st.session_state.score}")
+            del st.session_state.selected_image  # Reset selection
+            self.display_images()
         else:
-            st.write("Wrong! Game Over!")
-            st.write(f"Your final score: {st.session_state.score}")
-            st.session_state.page = "home"
+            st.session_state.lives -= 1
+            if st.session_state.lives > 0:
+                st.write("Wrong! This image was real. Try again!")
+                del st.session_state.selected_image  # Reset selection
+                self.display_images()
+            else:
+                st.write("Game Over!")
+                st.write(f"Your final score: {st.session_state.score}")
+                self.update_leaderboard()
+                st.session_state.page = "home"
+
+    # def update_leaderboard(self):
+    #     """Update the leaderboard with the player's score."""
+    #     st.write("Updating leaderboard...")
+    #     # Update leaderboard logic goes here, you can use your Database methods
+
+    #     # Example:
+    #     leaderboard = Leaderboard()  # Initialize your Leaderboard class
+    #     leaderboard.add_score(self.player_name, st.session_state.score)
+
+    #     # Display leaderboard
+    #     st.write("Leaderboard:")
+    #     leaderboard_data = leaderboard.get_leaderboard()
+    #     for idx, entry in enumerate(leaderboard_data, start=1):
+    #         st.write(f"{idx}. {entry['player_name']}: {entry['score']}")
+
+    #     # Reset game state
+    #     st.session_state.score = 0
+    #     st.session_state.level = 1
+    #     st.session_state.lives = 3
+    #     st.session_state.page = "home"
+
+
+
+# class GameTinder:
+#     def __init__(self):
+#         """Initialize the Game class with a database instance."""
+#         #self.db = db
+#         self.db = Database()
+#         self.db.refresh_active_status()
+#         self.images = self.db.get_active_images()
+#         self.current_image_pair = random.sample(self.images, 2)
+#         self.player_name = ""
+#         self.match_count = 0
+#         if 'reviewed_images' not in st.session_state:
+#             st.session_state.reviewed_images = set()
+#         if 'displayed_image_ids' not in st.session_state:
+#             st.session_state.displayed_image_ids = set()
+
+#     def display_play_page(self):
+#         """Display the game play page."""
+#         st.title("Welcom to the Tinder GAME")
+#         st.subheader("Let's get started")
+
+#         player_name = st.text_input("Enter your name to start playing:", key="player_name")
+#         if player_name:
+#             game_t = GameTinder()
+#             game_t.player_name = player_name
+#             if 'match_count' not in st.session_state:
+#                 st.session_state.match_count = 0
+#             if 'current_image_pair' not in st.session_state:
+#                 st.session_state.current_image_pair = game_t.current_image_pair
+#             GameTinder.start_game(game_t)
+
+
+#     def start_game(self):
+#         """Start the game and handle game logic."""
+#         if "level" not in st.session_state:
+#             st.session_state.level = 1
+#             st.session_state.score = 0
+#             st.session_state.timer = 30
+
+#         real_image, genai_image = self.db.get_random_images()
+#         images = [(real_image, 1), (genai_image, 0)]
+#         random.shuffle(images)
+
+#         #unique keys:
+#         left_button_key = f"left_{st.session_state.level}"
+#         right_button_key = f"right_{st.session_state.level}"
+
+#         col1, col2 = st.columns(2)
+#         with col1:
+#             if st.button("Select Left Image", key=left_button_key):
+#                 self.check_selection(images[0][1] == 1)
+#             st.image(images[0][0][4], use_column_width=True)
+#         with col2:
+#             if st.button("Select Right Image", key=right_button_key):
+#                 self.check_selection(images[1][1] == 1)
+#             st.image(images[1][0][4], use_column_width=True)
+
+#     def check_selection(self, is_real_image):
+#         if is_real_image:
+#             st.session_state.score += 1
+#             st.session_state.level += 1
+#             st.session_state.timer *= 0.9
+#             st.write(f"Correct! Your current score: {st.session_state.score}")
+#         else:
+#             st.write("Wrong! Game Over!")
+#             st.write(f"Your final score: {st.session_state.score}")
+#             st.session_state.page = "home"
         
-        if st.session_state.page != "home":
-            self.start_game()
+#         if st.session_state.page != "home":
+#             self.start_game()
 
 
-    # def check_selection(self, is_real_image):
-    #     """Check the user's selection and update the game state."""
-    #     if is_real_image:
-    #         st.session_state.score += 1
-    #         st.session_state.level += 1
-    #         st.session_state.timer *= 0.9
-    #         st.write(f"Correct! Your current score: {st.session_state.score}")
-    #         self.start_game()
-    #     else:
-    #         st.write("Wrong! Game Over!")
-    #         st.write(f"Your final score: {st.session_state.score}")
-    #         st.session_state.page = "home"
+#     # def check_selection(self, is_real_image):
+#     #     """Check the user's selection and update the game state."""
+#     #     if is_real_image:
+#     #         st.session_state.score += 1
+#     #         st.session_state.level += 1
+#     #         st.session_state.timer *= 0.9
+#     #         st.write(f"Correct! Your current score: {st.session_state.score}")
+#     #         self.start_game()
+#     #     else:
+#     #         st.write("Wrong! Game Over!")
+#     #         st.write(f"Your final score: {st.session_state.score}")
+#     #         st.session_state.page = "home"
   
 class GameFacemash:
     """Class to handle the game functionality."""
