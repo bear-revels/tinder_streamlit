@@ -9,6 +9,6 @@ from utils.Database_file import Database
 
 # tindergame.display_play_page()
 
-st.title("This game is under construction... COMMING SOON!")
-st.image('animations/under_construction.jpg', caption='COMMING SOON')
+st.title("This game is under construction...")
+st.image('animations/under_construction.png', caption='COMING SOON')
 
