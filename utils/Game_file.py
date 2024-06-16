@@ -102,7 +102,6 @@ class GameFacemash:
     
     def __init__(self):
         self.db = Database()
-        self.db.refresh_images()
         self.db.refresh_active_status()
         self.images = self.db.get_active_images()
         self.current_image_pair = random.sample(self.images, 2)
@@ -140,22 +139,6 @@ class GameFacemash:
     
     @staticmethod
     def play_game(game):
-        # """Main game loop to display images and capture player choices."""
-        # st.write("Click the image you like better:")
-        # col1, col2 = st.columns(2)
-
-        # if 'current_image_pair' not in st.session_state:
-        #     st.session_state.current_image_pair = game.current_image_pair
-        
-        # with col1:
-        #     if st.button("Choose Image 1"):
-        #         game.process_choice(st.session_state.current_image_pair[0], st.session_state.current_image_pair[1])
-        # with col2:
-        #     if st.button("Choose Image 2"):
-        #         game.process_choice(st.session_state.current_image_pair[1], st.session_state.current_image_pair[0])
-
-        # col1.image(st.session_state.current_image_pair[0]['filepath'])
-        # col2.image(st.session_state.current_image_pair[1]['filepath'])
         """Main game loop to display images and capture player choices."""
         if st.session_state.match_count >= 9:
             GameFacemash.display_pause_screen(game)
